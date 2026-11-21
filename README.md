@@ -24,8 +24,9 @@ packed into a single repository with no managed cloud services and $0 recurring 
   and deploys the static site, leaving no server to run or database to maintain
   between runs.
 
-The whole pipeline is reproducible: clone the repo, set the two free API keys,
-and `make run` rebuilds the dashboard from scratch.
+To reproduce locally: clone the repo, install `uv` and Node.js, set the two
+free API keys, then `make build` (installs dependencies) and `make run`
+(runs the full pipeline end-to-end).
 
 ![](docs/architecture.png)
 
@@ -33,7 +34,7 @@ and `make run` rebuilds the dashboard from scratch.
 
 Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adr/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
 
-### Implementation Choices
+##### Implementation Choices
 
 - **Reload v/s Incremental:** Full reload — every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
 
