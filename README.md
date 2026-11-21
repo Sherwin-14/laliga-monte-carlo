@@ -11,7 +11,7 @@ packed into a single repository with no managed cloud services and $0 recurring 
 
 - **dlt** — Pulls current-season fixtures, standings, and scorers
   from football-data.org, team Elo ratings from PlayerElo, and past-season CSVs
-  from a public-read S3 bucket into DuckDB.
+  from a public-read Cloudflare R2 bucket (S3-compatible) into DuckDB.
 - **dbt + DuckDB** — Cleans raw data through Layered dbt architecture and builds the standings, top-scorers, betting,
   and moneyball marts, and runs the in-house Monte Carlo season simulation.
 - **Evidence** — Renders the static multi-page dashboard (standings, top
@@ -47,4 +47,5 @@ Major architectural decisions that carry trade-offs or external constraints are 
 ### Minor Implementation Choices
 
 - **Reload v/s Incremental:** Full reload — every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
+- **Object storage — Cloudflare R2 v/s AWS S3:** The historical CSVs live in a public-read bucket, so the only abuse surface is downloads. S3 bills downloads as egress ($0.09/GB), so a scraping bot racks up a bill that grows without limit; R2 charges $0 egress, so downloads are free at any volume, and its 10M read-requests/month free tier is a risk I accept. Both cost ~$0 in normal use, but only R2 stays $0 under abuse.
 
