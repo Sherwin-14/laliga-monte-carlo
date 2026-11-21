@@ -2,7 +2,7 @@
 
 A serverless dashboard that forecasts La Liga title and relegation probabilities,
 alongside standings, top scorers, and betting analytics. Refreshed weekly (Thursdays)
-by GitHub Actions and served as a static site on GitHub Pages $0 to run.
+and served as a static site, $0 to run.
 
 ## Architecture
 
