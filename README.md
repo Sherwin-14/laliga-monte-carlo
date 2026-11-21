@@ -14,3 +14,11 @@ but leaner and re-architected for football.
 - **Evidence** — static BI dashboard
 - **GitHub Actions + GitHub Pages** — weekly refresh + hosting
 
+## Design Choices
+
+Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adr/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
+
+### Implementation Choices
+
+- **Reload v/s Incremental:** Full reload — every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
+
