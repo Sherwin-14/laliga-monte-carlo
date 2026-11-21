@@ -15,8 +15,7 @@ packed into a single repository with no managed cloud services and $0 recurring 
 - **dlt** — ingestion. Pulls current-season fixtures, standings, and scorers
   from football-data.org, team Elo ratings from PlayerElo, and past-season CSVs
   from a public-read S3 bucket into DuckDB.
-- **dbt + DuckDB** — transformation and simulation. Cleans raw data through
-  Medallion architecture and builds the standings, top-scorers, betting,
+- **dbt + DuckDB** — transformation and simulation. Cleans raw data through Layered dbt architecture and builds the standings, top-scorers, betting,
   and moneyball marts, and runs the in-house Monte Carlo season simulation.
 - **Evidence** — BI. Renders the static multi-page dashboard (standings, top
   scorers, betting, moneyball, and the title/relegation forecast).
@@ -24,17 +23,31 @@ packed into a single repository with no managed cloud services and $0 recurring 
   and deploys the static site, leaving no server to run or database to maintain
   between runs.
 
-To reproduce locally: clone the repo, install `uv` and Node.js, set the two
-free API keys, then `make build` (installs dependencies) and `make run`
-(runs the full pipeline end-to-end).
-
 ![](docs/architecture.png)
+
+## Quick start
+
+Prerequisites: `uv` (Python 3.14) and Node.js.
+
+```bash
+# install uv (manages Python 3.14 + project dependencies)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+git clone https://github.com/<your-username>/laliga-monte-carlo.git
+cd laliga-monte-carlo
+
+# set the two free API keys (football-data.org + PlayerElo) as secrets
+
+make build   # installs Python + Node dependencies
+make run     # ingest -> transform -> build Evidence sources
+make dev     # local preview server
+```
 
 ## Design Choices
 
-Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adr/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
+Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adrs/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
 
-##### Implementation Choices
+### Minor Implementation Choices
 
 - **Reload v/s Incremental:** Full reload — every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
 
