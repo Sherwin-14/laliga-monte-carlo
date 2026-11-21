@@ -14,15 +14,3 @@ but leaner and re-architected for football.
 - **Evidence** — static BI dashboard
 - **GitHub Actions + GitHub Pages** — weekly refresh + hosting
 
-## Status
-
-In progress. Architecture decisions live in [`docs/adr/`](docs/adr/), and the
-forecast methodology is documented in [`METHODOLOGY.md`](METHODOLOGY.md).
-
-## Quick start
-
-```bash
-make build   # venv + deps + dbt packages
-make run     # ingest -> dbt -> evidence sources
-make dev     # local dev server
-```
