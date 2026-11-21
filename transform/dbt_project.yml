@@ -1,0 +1,37 @@
+name: laliga_forecast
+version: '1.0'
+profile: default
+config-version: 2
+require-dbt-version: [">=1.9.0", "<2.0.0"]
+
+model-paths: ["models"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+log-path: "logs"
+packages-install-path: "dbt_packages"
+clean-targets: ["target", "dbt_packages", "logs"]
+
+# Full reload: tables are rebuilt from scratch every run (data is tiny).
+models:
+  laliga_forecast:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: table
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+    simulator:
+      +materialized: table
+      +schema: simulator
+
+vars:
+  scenarios: 10000      # Monte Carlo scenarios per weekly run
+  home_advantage: 74    # Elo points added to the home team (see METHODOLOGY.md)

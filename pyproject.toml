@@ -1,0 +1,22 @@
+[project]
+name = "laliga-monte-carlo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Sherwin-14", email = "varghesesheriwn@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "dbt>=2.0.12",
+    "dlt>=1.32.0",
+    "duckdb>=2.0.1",
+    "pandas>=3.1.1",
+]
+
+[project.scripts]
+laliga-monte-carlo = "laliga_monte_carlo:main"
+
+[build-system]
+requires = ["uv_build>=0.13.8,<0.14.0"]
+build-backend = "uv_build"

@@ -1,0 +1,26 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# dbt
+transform/dbt_packages/
+transform/logs/
+transform/target/
+transform/docs/
+
+# DuckDB warehouse (ephemeral — rebuilt on every run, never committed)
+data/warehouse/
+*.duckdb
+
+# dlt artifacts
+src/.dlt/
+
+# Evidence
+evidence/node_modules/
+evidence/build/
+evidence/.evidence/meta
+
+# OS
+.DS_Store
