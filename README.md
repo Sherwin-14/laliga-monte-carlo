@@ -7,12 +7,27 @@ by GitHub Actions and served as a static site on GitHub Pages $0 to run.
 Inspired by [`matsonj/nba-monte-carlo`](https://github.com/matsonj/nba-monte-carlo),
 but leaner and re-architected for football.
 
-## Stack
+## Architecture
 
-- **dlt** — data ingestion (football-data.org + PlayerElo)
-- **dbt + DuckDB** — transformation and Monte Carlo simulation
-- **Evidence** — static BI dashboard
-- **GitHub Actions + GitHub Pages** — weekly refresh + hosting
+A **Modern Data Stack in a Box**: ingestion, transformation, simulation, and BI
+packed into a single repository with no managed cloud services and $0 recurring cost.
+
+- **dlt** — ingestion. Pulls current-season fixtures, standings, and scorers
+  from football-data.org, team Elo ratings from PlayerElo, and past-season CSVs
+  from a public-read S3 bucket into DuckDB.
+- **dbt + DuckDB** — transformation and simulation. Cleans raw data through
+  Medallion architecture and builds the standings, top-scorers, betting,
+  and moneyball marts, and runs the in-house Monte Carlo season simulation.
+- **Evidence** — BI. Renders the static multi-page dashboard (standings, top
+  scorers, betting, moneyball, and the title/relegation forecast).
+- **GitHub Actions + GitHub Pages** — delivery. A weekly Thursday cron builds
+  and deploys the static site, leaving no server to run or database to maintain
+  between runs.
+
+The whole pipeline is reproducible: clone the repo, set the two free API keys,
+and `make run` rebuilds the dashboard from scratch.
+
+![](docs/architecture.png)
 
 ## Design Choices
 
