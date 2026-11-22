@@ -6,20 +6,6 @@ and served as a static site, $0 to run.
 
 ## Architecture
 
-A **Modern Data Stack in a Box**: ingestion, transformation, simulation, and BI
-packed into a single repository with no managed cloud services and $0 recurring cost.
-
-- **dlt** — Pulls current-season fixtures, standings, and scorers
-  from football-data.org, team Elo ratings from PlayerElo, and past-season CSVs
-  from a public-read S3 bucket into DuckDB.
-- **dbt + DuckDB** — Cleans raw data through Layered dbt architecture and builds the standings, top-scorers, betting,
-  and moneyball marts, and runs the in-house Monte Carlo season simulation.
-- **Evidence** — Renders the static multi-page dashboard (standings, top
-  scorers, betting, moneyball, and the title/relegation forecast).
-- **GitHub Actions + GitHub Pages** — A weekly Thursday cron builds
-  and deploys the static site, leaving no server to run or database to maintain
-  between runs.
-
 ![](docs/architecture.png)
 
 ## Quick start
