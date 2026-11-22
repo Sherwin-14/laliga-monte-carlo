@@ -11,7 +11,7 @@ packed into a single repository with no managed cloud services and $0 recurring 
 
 - **dlt** — Pulls current-season fixtures, standings, and scorers
   from football-data.org, team Elo ratings from PlayerElo, and past-season CSVs
-  from a public-read Cloudflare R2 bucket (S3-compatible) into DuckDB.
+  from a public-read S3 bucket into DuckDB.
 - **dbt + DuckDB** — Cleans raw data through Layered dbt architecture and builds the standings, top-scorers, betting,
   and moneyball marts, and runs the in-house Monte Carlo season simulation.
 - **Evidence** — Renders the static multi-page dashboard (standings, top
@@ -46,7 +46,7 @@ Major architectural decisions that carry trade-offs or external constraints are 
 
 ### Minor Implementation Choices
 
-- **Reload v/s Incremental:** Full reload — every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
-- **Object storage: Cloudflare R2 v/s AWS S3:** The historical data lives in a public-read bucket, so the only abuse surface is downloads. S3 bills downloads as egress ($0.09/GB), so a scraping bot racks up a bill that grows without limit; R2 charges $0 egress, so downloads are free at any volume, and its 10M read-requests/month free tier is a risk I accept if breached, it incurs a small charge of $0.36 per million requests. Both cost ~$0 in normal use, but only R2 stays $0 under abuse. Because R2 is S3-compatible, so if R2's terms ever change, I can swap back to S3 or store the CSVs in git with no code change.
-- **Hosting: GitHub Pages v/s Vercel/Netlify:** Code, CI, and hosting stay in one place — the Thursday cron builds and publishes to Pages in a single workflow, with no second account or separate deploy pipeline. Pages is free for public repos and runs on GitHub's CDN-backed infrastructure, so uptime is a non-issue. Vercel/Netlify would add a second vendor for features (edge functions, preview deploys) this static dashboard doesn't need.
+- **Reload v/s Incremental:** Full reload every run truncates and rebuilds all tables from scratch. La Liga's data is tiny (a few hundred rows), so the usual reason for incremental loading (avoiding re-processing large tables) doesn't apply.
+- **Object storage: AWS S3 v/s Cloudflare R2:** The historical CSVs live in a public-read S3 bucket, so the pipeline reads them credential-free and stays reproducible for any cloner. S3 bills downloads as egress ($0.09/GB), so a scraping bot could run up a bill, but the data is a few MB (casual abuse costs pennies) and the risk is capped by a $1 AWS budget alert plus an instant kill switch. R2 (zero egress) was preferred but rejected only because its account couldn't be set up — the bank blocked the transaction.
+- **Hosting: GitHub Pages v/s Vercel/Netlify:** Code, CI, and hosting stay in one place the Thursday cron builds and publishes to Pages in a single workflow, with no second account or separate deploy pipeline. Pages is free for public repos and runs on GitHub's CDN-backed infrastructure, so uptime is a non-issue. Vercel/Netlify would add a second vendor for features (edge functions, preview deploys) this static dashboard doesn't need.
 
