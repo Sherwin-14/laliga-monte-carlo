@@ -58,21 +58,24 @@ Each option is checked against the constraints, then the survivors are assessed 
 Build both the strength rating and the simulation myself, as the reference project does.
 
 - **Constraints:** fails time to launch. Building both layers completely is not viable within my timeframe.
-- **Outcome:** rejected.
+
+**Outcome:** rejected.
 
 ### 2. ClubElo
 
 A long-running source of club Elo ratings only; it would still need an in-house simulation, as in Option 5.
 
 - **Constraints:** fails availability. It sits behind Cloudflare bot protection, so it cannot be reached programmatically without circumventing it.
-- **Outcome:** rejected.
+
+**Outcome:** rejected.
 
 ### 3. Vendor: Apify actor
 
 A community actor that returns Monte Carlo title and relegation probabilities for La Liga directly.
 
 - **Constraints:** fails cost, because it is paid.
-- **Outcome:** rejected.
+
+**Outcome:** rejected.
 
 ### 4. Vendor: PlayerElo
 
@@ -80,7 +83,8 @@ A live REST API with a dedicated La Liga simulation endpoint. I would use its pr
 
 - **Constraints:** passes all three. Free tier of 500 requests/month, under a clear CC BY 4.0 license.
 - **Explainability:** low. The methodology is not clearly documented, so the probabilities are a black box.
-- **Outcome:** rejected. The Hybrid explains more of the pipeline.
+
+**Outcome:** rejected. The Hybrid explains more of the pipeline.
 
 ### 5. Hybrid: PlayerElo ratings, in-house simulation
 
@@ -88,7 +92,8 @@ I take team Elo ratings from the same PlayerElo simulation endpoint and run my o
 
 - **Constraints:** passes all three. PlayerElo's free tier covers a weekly call under CC BY 4.0, while fixtures, results, and the current table come from the existing free `football-data.org` pipeline.
 - **Explainability:** high on the simulation, which I write and control. The Elo inputs remain undocumented.
-- **Outcome:** chosen.
+
+**Outcome:** chosen.
 
 ## References
 
