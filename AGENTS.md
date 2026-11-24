@@ -16,9 +16,8 @@ See `docs/adr/` for recorded architecture decisions. Read the relevant ADR befor
 ## Non-negotiable rules
 
 1. **Always write functional Python.** No object-oriented design.
-2. **Write code that is easy to debug.** Explicit, boring and traceable beats clever.
-3. **Write quality code.** Every change should be one a senior architect or a programming enthusiast would respect.
-4. **Use Ruff** and run it whenever I ask.
+2. **Write quality, debuggable code.** Follow the Zen of Python (import this) —explicit, boring, and traceable beats clever.
+3. **Use uv and Ruff.** Manage the environment and run all project tools (ruff, pytest, dbt) through uv. Run Ruff whenever I ask.
 
 If a request conflicts with these rules, say so and ask before proceeding.
 
