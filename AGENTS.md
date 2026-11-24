@@ -21,14 +21,12 @@ See `docs/adr/` for recorded architecture decisions. Read the relevant ADR befor
 
 If a request conflicts with these rules, say so and ask before proceeding.
 
-## Ruff
+## Pipeline Best Practices
 
-Ruff is the only linter and formatter (no Black, flake8, isort or pylint). The configuration lives in `pyproject.toml`.
-
-- When I ask you to run it, use `ruff check --fix .` then `ruff format .`, and repeat until both report zero issues.
-- Never claim code is lint-clean unless you ran Ruff and it passed. Report the result.
-- Do not silence Ruff to make it pass. No blanket `# noqa`, no disabling rules, no per-file ignores without asking. A targeted `# noqa: CODE` needs a one-line reason.
-- Keep diffs focused. Do not reformat unrelated files.
+- **Keep layers focused:** Python (`dlt` and historical fetches) handles ingestion and boundary validation; `dbt` (DuckDB SQL) runs transformations, tie-breakers, and the Monte Carlo simulation; Evidence (`evidence.dev`) renders BI views from marts without embedding business logic.
+- **Make weekly runs idempotent:** Design Thursday refreshes so re-running a job does not duplicate fixtures, standings, or ratings, and never run `dlt` and `dbt` concurrently against the same DuckDB database.
+- **Keep simulations deterministic:** Pass `seed`, `num_simulations`, and `run_date` via `dbt` variables rather than reading the system clock inside SQL models.
+- **Honor source commitments:** Keep PlayerElo CC BY 4.0 attribution visible on the dashboard as required by `docs/adr/004-monte-carlo-simulation.md`.
 
 ## Functional paradigm, no OOP
 
