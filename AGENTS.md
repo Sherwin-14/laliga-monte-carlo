@@ -15,7 +15,7 @@ See `docs/adr/` for recorded architecture decisions. Read the relevant ADR befor
 
 ## Non-negotiable rules
 
-1. **Always write functional Python.** No object-oriented design.
+1. **Write strictly functional Python—never OOP.** Functions and immutable data only; no classes or stateful objects.
 2. **Write quality, debuggable code.** Follow the Zen of Python (import this) —explicit, boring, and traceable beats clever.
 3. **Use uv and Ruff.** Manage the environment and run all project tools (ruff, pytest, dbt) through uv. Run Ruff whenever I ask.
 
