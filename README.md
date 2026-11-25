@@ -28,7 +28,7 @@ make dev     # local preview server
 
 ## Design Choices
 
-Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adrs/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
+Major architectural decisions that carry trade-offs or external constraints are documented in detail in the `docs/adr/` directory, while smaller implementation choices were made directly during development to keep the pipeline lean and maintainable.
 
 ### Minor Implementation Choices
 
