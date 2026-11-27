@@ -1,0 +1,95 @@
+{
+  "count": 3,
+  "filters": {
+    "limit": 3
+  },
+  "competition": {
+    "id": 2014,
+    "name": "Primera Division",
+    "code": "PD",
+    "type": "LEAGUE",
+    "emblem": "https://crests.football-data.org/PD.png"
+  },
+  "season": {
+    "id": 638,
+    "startDate": "2020-09-19",
+    "endDate": "2021-05-23",
+    "currentMatchday": 38,
+    "winner": null,
+    "stages": ["REGULAR_SEASON"]
+  },
+  "scorers": [
+    {
+      "player": {
+        "id": 44,
+        "name": "Cristiano Ronaldo",
+        "firstName": "Cristiano Ronaldo",
+        "lastName": "dos Santos Aveiro",
+        "dateOfBirth": "1985-02-05",
+        "countryOfBirth": "Portugal",
+        "nationality": "Portugal",
+        "position": "Attacker",
+        "shirtNumber": null,
+        "lastUpdated": "2021-10-13T08:04:10Z"
+      },
+      "team": {
+        "id": 109,
+        "name": "Juventus FC",
+        "shortName": "Juventus",
+        "tla": "JUV",
+        "crest": "https://crests.football-data.org/109.svg"
+      },
+      "goals": 29,
+      "assists": 3,
+      "penalties": 6
+    },
+    {
+      "player": {
+        "id": 3662,
+        "name": "Romelu Lukaku",
+        "firstName": "Romelu",
+        "lastName": "Lukaku Menama",
+        "dateOfBirth": "1993-05-13",
+        "countryOfBirth": "Belgium",
+        "nationality": "Belgium",
+        "position": "Attacker",
+        "shirtNumber": null,
+        "lastUpdated": "2021-10-13T08:04:13Z"
+      },
+      "team": {
+        "id": 108,
+        "name": "FC Internazionale Milano",
+        "shortName": "Inter",
+        "tla": "INT",
+        "crest": "https://crests.football-data.org/108.png"
+      },
+      "goals": 24,
+      "assists": 11,
+      "penalties": 6
+    },
+    {
+      "player": {
+        "id": 57,
+        "name": "Luis Muriel",
+        "firstName": "Luis Fernando",
+        "lastName": null,
+        "dateOfBirth": "1991-04-16",
+        "countryOfBirth": "Colombia",
+        "nationality": "Colombia",
+        "position": "Attacker",
+        "shirtNumber": null,
+        "lastUpdated": "2020-09-07T21:10:15Z"
+      },
+      "team": {
+        "id": 102,
+        "name": "Atalanta BC",
+        "shortName": "Atalanta",
+        "tla": "ATA",
+        "crest": "https://crests.football-data.org/102.svg"
+      },
+      "goals": 22,
+      "assists": 7,
+      "penalties": 2
+    }
+  ]
+}
