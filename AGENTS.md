@@ -25,6 +25,7 @@ If a request conflicts with these rules, say so and ask before proceeding.
 
 - **Keep layers focused:** Python (`dlt` and historical fetches) handles ingestion and boundary validation; `dbt` (DuckDB SQL) runs transformations, tie-breakers, and the Monte Carlo simulation; Evidence (`evidence.dev`) renders BI views from marts without embedding business logic.
 - **Make weekly runs idempotent:** Design Thursday refreshes so re-running a job does not duplicate fixtures, standings, or ratings, and never run `dlt` and `dbt` concurrently against the same DuckDB database.
+- **Schema drift must never fail the pipeline:** Ingestion is tolerant — missing or null source fields become `None`, and the dlt schema is declared explicitly (the `columns=` hint) so every column still materializes — and data-quality checks run as non-blocking warnings surfaced at the end of the run. This tolerance covers column drift only; malformed responses and HTTP errors still fail fast.
 - **Keep simulations deterministic:** Pass `seed`, `num_simulations`, and `run_date` via `dbt` variables rather than reading the system clock inside SQL models.
 - **Honor source commitments:** Keep PlayerElo CC BY 4.0 attribution visible on the dashboard as required by `docs/adr/004-monte-carlo-simulation.md`.
 
@@ -39,13 +40,14 @@ If a request conflicts with these rules, say so and ask before proceeding.
 - **Compose small functions.** One job each, with a descriptive verb name. Prefer comprehensions, `map`, `filter`, `functools` and `itertools` over nested loops and mutable accumulators.
 - **Pass dependencies as arguments:** the current date, the HTTP client, the DB connection.
 - **Type hints on every function**, including return types.
+- **Google-style docstrings** on every function, with `Args`, `Returns`, and `Raises` sections where applicable. No module-level docstrings.
 
 ## Write code that is easy to debug
 
 - **Small, single-purpose functions** (about 20 lines or fewer). If a block needs a comment to explain it, extract it into a named function.
 - **Explicit inputs and outputs.** No hidden dependencies and no results that change by day or run.
 - **Guard clauses and early returns** over deep nesting.
-- **Fail fast and loudly.** Validate at the boundary (API responses, database rows, config) and raise a specific error saying what was wrong, what was expected and what was received. No bare `except:`, no swallowed exceptions, and no `None` or default returned to hide a failure.
+- **Fail fast and loudly.** Validate at the boundary (API responses, database rows, config) and raise a specific error saying what was wrong, what was expected and what was received. No bare `except:`, no swallowed exceptions, and no `None` or default returned to hide a failure — except for schema-drift tolerance (see Pipeline Best Practices).
 - **Errors carry context** (team, matchday, endpoint, run date). Use `raise ... from err` to keep the cause.
 - **Log at the boundaries, not inside pure functions,** with the `logging` module and structured messages. No `print`.
 - **No magic numbers or strings.** Name constants and keep them in one place.

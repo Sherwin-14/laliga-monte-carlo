@@ -1,15 +1,3 @@
-"""Custom exceptions for the La Liga pipeline.
-
-One specific type per failure mode, so call sites can fail loudly with a
-clear message. Raise sites should state what was wrong, what was expected,
-and what was received — for example::
-
-    raise ChecksumMismatchError(
-        f"{path}: checksum mismatch — expected {expected_sha}, got {actual_sha}"
-    )
-"""
-
-
 class PipelineError(Exception):
     """Base class for every error raised by the pipeline.
 

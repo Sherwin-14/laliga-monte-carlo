@@ -22,7 +22,7 @@ def _load_fixture() -> dict:
 def _scorer(**overrides: object) -> dict:
     base: dict = {
         "player": {"id": 44, "name": "Cristiano Ronaldo"},
-        "team": {"id": 109, "name": "Juventus FC", "tla": "JUV"},
+        "team": {"id": 109, "name": "Juventus FC"},
         "goals": 5,
         "assists": 2,
         "penalties": 1,
@@ -39,7 +39,6 @@ def test_extract_scorers_returns_flattened_rows() -> None:
         "player_name": "Cristiano Ronaldo",
         "team_id": 109,
         "team_name": "Juventus FC",
-        "team_tla": "JUV",
         "goals": 29,
         "assists": 3,
         "penalties": 6,
@@ -49,6 +48,7 @@ def test_extract_scorers_returns_flattened_rows() -> None:
 def test_extract_scorers_ignores_unused_fields() -> None:
     rows = extract_scorers(_load_fixture())
     assert "position" not in rows[0]
+    assert "tla" not in rows[0]
     assert "crest" not in rows[0]
 
 
@@ -63,26 +63,29 @@ def test_extract_scorers_empty_list_returns_empty() -> None:
     assert extract_scorers(response) == []
 
 
-def test_flatten_scorer_missing_player_raises() -> None:
+def test_flatten_scorer_missing_player_fills_none() -> None:
     scorer = _scorer()
     del scorer["player"]
-    with pytest.raises(ValidationError):
-        flatten_scorer(scorer)
+    row = flatten_scorer(scorer)
+    assert row["player_id"] is None
+    assert row["player_name"] is None
 
 
-def test_flatten_scorer_missing_goals_raises() -> None:
+def test_flatten_scorer_missing_team_fills_none() -> None:
+    scorer = _scorer()
+    del scorer["team"]
+    row = flatten_scorer(scorer)
+    assert row["team_id"] is None
+    assert row["team_name"] is None
+
+
+def test_flatten_scorer_missing_goals_is_none() -> None:
     scorer = _scorer()
     del scorer["goals"]
-    with pytest.raises(ValidationError):
-        flatten_scorer(scorer)
+    assert flatten_scorer(scorer)["goals"] is None
 
 
-def test_flatten_scorer_null_assists_and_penalties_default_to_zero() -> None:
+def test_flatten_scorer_null_values_preserved() -> None:
     row = flatten_scorer(_scorer(assists=None, penalties=None))
-    assert row["assists"] == 0
-    assert row["penalties"] == 0
-
-
-def test_flatten_scorer_null_tla_is_none() -> None:
-    row = flatten_scorer(_scorer(team={"id": 109, "name": "Juventus FC"}))
-    assert row["team_tla"] is None
+    assert row["assists"] is None
+    assert row["penalties"] is None
