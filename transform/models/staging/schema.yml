@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_fdorg__scorers
+    description: >
+      Clean, typed scorers rows from the raw dlt table. One row per player in
+      the current season's top-scorer list. Types are cast explicitly so
+      downstream models never depend on source types.
+    columns:
+      - name: player_id
+        description: football-data.org player id.
+        tests:
+          - not_null
+          - unique
+      - name: player_name
+        description: Player's full name.
+        tests:
+          - not_null
+      - name: team_id
+        description: football-data.org team id.
+        tests:
+          - not_null
+      - name: team_name
+        description: Player's club name (denormalized).
+        tests:
+          - not_null
+      - name: goals
+        description: Goals scored in the current season.
+        tests:
+          - not_null
+      - name: assists
+        description: Assists in the current season.
+        tests:
+          - not_null
+      - name: penalties
+        description: Goals scored from penalties.
+        tests:
+          - not_null

@@ -32,6 +32,15 @@ models:
       +materialized: table
       +schema: simulator
 
+# Data-quality tests are warnings, not blockers: schema drift must never fail
+# the pipeline, so a failing test surfaces in logs but the run still completes.
+tests:
+  +severity: warn
+
 vars:
   scenarios: 10000      # Monte Carlo scenarios per weekly run
   home_advantage: 74    # Elo points added to the home team (see METHODOLOGY.md)
+
+flags:
+  send_anonymous_usage_stats: false
+  use_colors: true

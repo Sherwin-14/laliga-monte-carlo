@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: fdorg
+    description: >
+      Raw tables loaded by dlt from football-data.org into the `raw` schema of
+      the DuckDB warehouse.
+    schema: raw
+    tables:
+      - name: scorers
+        description: >
+          Current-season La Liga top scorers, flattened by the Python ingestion
+          layer from the /v4/competitions/PD/scorers endpoint.
+        columns:
+          - name: player_id
+            description: football-data.org player id.
+          - name: player_name
+            description: Player's full name.
+          - name: team_id
+            description: football-data.org team id.
+          - name: team_name
+            description: Player's club name.
+          - name: goals
+            description: Goals scored in the current season.
+          - name: assists
+            description: Assists in the current season.
+          - name: penalties
+            description: Goals scored from penalties.

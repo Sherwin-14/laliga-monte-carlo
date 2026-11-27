@@ -10,10 +10,10 @@ and served as a static site, $0 to run.
 
 ## Quick start
 
-Prerequisites: `uv` (Python 3.14) and Node.js.
+Prerequisites: `uv` (Python 3.13) and Node.js.
 
 ```bash
-# install uv (manages Python 3.14 + project dependencies)
+# install uv (manages Python 3.13 + project dependencies)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 git clone https://github.com/<your-username>/laliga-monte-carlo.git

@@ -60,6 +60,7 @@ If a request conflicts with these rules, say so and ask before proceeding.
 Follow industry best practices for dbt projects, and work the way an ideal analytics engineer would. The project should read like a well-run analytics repository.
 
 - **Layered models:** staging, then intermediate, then marts, with one clear purpose per model, built from named CTEs.
+- **No team dimension or SCD:** denormalize `team_name` directly into marts. A shared `dim_teams` or SCD Type 2 adds no value for this 20-team, 4-page dashboard — the team set changes every season (relegation/promotion) and historical (football-data.co.uk) vs. current (football-data.org) sources identify teams differently (name string vs. numeric id).
 - **Test and document:** add tests for keys, nulls and expected values, and descriptions for models and columns, so the project explains itself.
 - **Reproducible runs:** the simulation takes its seed and number of simulations as variables, and the run date is passed in, never read from the clock inside a model.
 - **Develop in small, reviewable steps,** and build and test before calling a change done.
