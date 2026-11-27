@@ -9,9 +9,6 @@ COMPETITION_CODE = "PD"
 SCORERS_LIMIT = 500
 DATASET_NAME = "raw"
 
-# Declare the schema explicitly so dlt always materializes every column, even
-# when a source field is null or missing. Without this, dlt drops columns that
-# received no data (all-null), which would break downstream dbt models.
 SCORER_COLUMNS = {
     "player_id": {"data_type": "bigint", "nullable": True},
     "player_name": {"data_type": "text", "nullable": True},
