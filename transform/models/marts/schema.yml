@@ -3,25 +3,17 @@ version: 2
 models:
   - name: fct_top_scorers
     description: >
-      Current La Liga top scorers, ranked by goals (then assists, then name).
-      One row per player, with the team name denormalized in. This is the single
-      table the top-scorers page reads.
+      Current La Liga top scorers, ranked by goals (then player name). One row
+      per player, with the team name denormalized in. This is the single table
+      the top-scorers page reads.
     columns:
-      - name: player_id
-        description: football-data.org player id.
+      - name: scorer_rank
+        description: 1-based rank by goals desc, then player name.
+        tests:
+          - not_null
       - name: player_name
         description: Player's full name.
-      - name: team_id
-        description: football-data.org team id.
       - name: team_name
         description: Player's club name (denormalized).
       - name: goals
         description: Goals scored in the current season.
-      - name: assists
-        description: Assists in the current season.
-      - name: penalties
-        description: Goals scored from penalties.
-      - name: scorer_rank
-        description: 1-based rank by goals desc, assists desc, then name.
-        tests:
-          - not_null

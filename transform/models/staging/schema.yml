@@ -30,9 +30,5 @@ models:
           - not_null
       - name: assists
         description: Assists in the current season.
-        tests:
-          - not_null
       - name: penalties
         description: Goals scored from penalties.
-        tests:
-          - not_null

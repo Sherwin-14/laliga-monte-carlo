@@ -1,0 +1,4 @@
+name: laliga
+type: duckdb
+options:
+  filename: ../../../data/warehouse/laliga.duckdb

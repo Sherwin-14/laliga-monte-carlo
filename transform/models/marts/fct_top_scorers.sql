@@ -6,9 +6,15 @@ ranked as (
     select
         *,
         row_number() over (
-            order by goals desc, assists desc, player_name asc
+            order by goals desc, player_name asc
         ) as scorer_rank
     from scorers
 )
 
-select * from ranked
+select
+    scorer_rank,
+    player_name,
+    team_name,
+    goals
+from ranked
+where scorer_rank <= 10

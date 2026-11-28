@@ -19,6 +19,7 @@ dev:
 
 # Production static build (GitHub Pages artifact).
 serve:
+	rm -rf evidence/build
 	cd evidence && npm run build
 
 # Tear down the ephemeral warehouse (rebuilt on the next run).

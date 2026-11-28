@@ -1,0 +1,43 @@
+appearance:
+  default: light
+  switcher: true
+
+theme:
+  colorScales:
+    default:
+      - "#E2001A"   # La Liga red
+      - "#F1BF00"   # Spanish gold
+      - "#00509E"   # navy
+      - "#46B000"   # green
+      - "#E18727"   # amber
+      - "#7B3FA0"   # purple
+  colors:
+    primary:
+      light: "#E2001A"   # La Liga red
+      dark: "#FF5A5F"
+    accent:
+      light: "#F1BF00"   # Spanish gold
+      dark: "#FFD34D"
+    base:
+      light: "#F8F8F8"
+      dark: "#1A1A1A"
+    info:
+      light: "#00509E"
+      dark: "#4C9FE0"
+    warning:
+      light: "#E18727"
+      dark: "#F0A44C"
+    negative:
+      light: "#BC1200"
+      dark: "#FF6B5E"
+    positive:
+      light: "#46B000"
+      dark: "#6BD32F"
+
+plugins:
+  components:
+    # Loads all of Evidence's core charts and UI components.
+    "@evidence-dev/core-components": {}
+  datasources:
+    # The DuckDB adapter reads the warehouse file written by dlt + dbt.
+    "@evidence-dev/duckdb": {}

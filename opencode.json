@@ -1,0 +1,10 @@
+{
+  "mcp": {
+    "servers": {
+      "evidence-docs": {
+        "type": "remote",
+        "url": "https://evidence.studio/mcp"
+      }
+    }
+  }
+}
