@@ -6,6 +6,8 @@ renamed as (
     select
         cast(player_id as bigint) as player_id,
         cast(player_name as varchar) as player_name,
+        cast(date_of_birth as date) as date_of_birth,
+        cast(nationality as varchar) as nationality,
         cast(team_id as bigint) as team_id,
         cast(team_name as varchar) as team_name,
         cast(goals as bigint) as goals,

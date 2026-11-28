@@ -1,7 +1,7 @@
 import dlt
 
 from exceptions import ConfigError
-from ingest import load_scorers
+from ingest import load_scorers, load_standings
 
 WAREHOUSE_PATH = "../data/warehouse/laliga.duckdb"
 API_KEY_PATH = "sources.fdorg.api_key"
@@ -26,7 +26,9 @@ def read_api_key() -> str:
 
 def main() -> None:
     """Run the current-season ingestion steps."""
-    load_scorers(read_api_key(), WAREHOUSE_PATH)
+    api_key = read_api_key()
+    load_scorers(api_key, WAREHOUSE_PATH)
+    load_standings(api_key, WAREHOUSE_PATH)
 
 
 if __name__ == "__main__":

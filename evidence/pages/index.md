@@ -1,17 +1,9 @@
 ---
-title: The Pichichi Race
+title: La Liga Forecast
 ---
 
-La Liga's golden boot — current-season scorers ranked by goals.
+A season-forecast dashboard for La Liga — title and relegation probabilities, the golden-boot race, and moneyball analytics.
 
-```sql top_scorers
-select * from src_fct_top_scorers
-order by scorer_rank
-```
+## Explore
 
-<DataTable data={top_scorers} rows=5>
-  <Column id=scorer_rank title="#"/>
-  <Column id=player_name title="Player"/>
-  <Column id=team_name title="Team"/>
-  <Column id=goals title="Goals"/>
-</DataTable>
+- [Current season](/current-season) — the live table and top scorers.

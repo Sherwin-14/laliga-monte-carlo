@@ -4,8 +4,8 @@ models:
   - name: fct_top_scorers
     description: >
       Current La Liga top scorers, ranked by goals (then player name). One row
-      per player, with the team name denormalized in. This is the single table
-      the top-scorers page reads.
+      per player, with the team name denormalized in and age computed from date
+      of birth. This is the single table the top-scorers page reads.
     columns:
       - name: scorer_rank
         description: 1-based rank by goals desc, then player name.
@@ -15,5 +15,40 @@ models:
         description: Player's full name.
       - name: team_name
         description: Player's club name (denormalized).
+      - name: nationality
+        description: Player's nationality.
+      - name: age
+        description: Player's whole-year age as of the refresh date.
       - name: goals
         description: Goals scored in the current season.
+  - name: fct_standings
+    description: >
+      The current La Liga table, ordered by position, with the team name
+      denormalized in. This is the single table the standings section reads.
+    columns:
+      - name: position
+        description: League position (1-20).
+        tests:
+          - not_null
+      - name: team_name
+        description: Team name.
+        tests:
+          - not_null
+      - name: played_games
+        description: Matches played.
+      - name: won
+        description: Matches won.
+      - name: draw
+        description: Matches drawn.
+      - name: lost
+        description: Matches lost.
+      - name: goals_for
+        description: Goals scored.
+      - name: goals_against
+        description: Goals conceded.
+      - name: goal_difference
+        description: Goals scored minus conceded.
+      - name: points
+        description: Points.
+        tests:
+          - not_null

@@ -16,6 +16,10 @@ models:
         description: Player's full name.
         tests:
           - not_null
+      - name: date_of_birth
+        description: Player's date of birth.
+      - name: nationality
+        description: Player's nationality.
       - name: team_id
         description: football-data.org team id.
         tests:
@@ -32,3 +36,43 @@ models:
         description: Assists in the current season.
       - name: penalties
         description: Goals scored from penalties.
+  - name: stg_fdorg__standings
+    description: >
+      Clean, typed standings rows from the raw dlt table. One row per team in
+      the current season's full table. Types are cast explicitly so downstream
+      models never depend on source types.
+    columns:
+      - name: position
+        description: League position (1-20).
+        tests:
+          - not_null
+          - unique
+      - name: team_id
+        description: football-data.org team id.
+        tests:
+          - not_null
+          - unique
+      - name: team_name
+        description: Team name.
+        tests:
+          - not_null
+      - name: played_games
+        description: Matches played.
+        tests:
+          - not_null
+      - name: won
+        description: Matches won.
+      - name: draw
+        description: Matches drawn.
+      - name: lost
+        description: Matches lost.
+      - name: points
+        description: Points.
+        tests:
+          - not_null
+      - name: goals_for
+        description: Goals scored.
+      - name: goals_against
+        description: Goals conceded.
+      - name: goal_difference
+        description: Goals scored minus conceded.
