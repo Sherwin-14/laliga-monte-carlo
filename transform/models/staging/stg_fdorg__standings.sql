@@ -7,6 +7,7 @@ renamed as (
         cast(position as bigint) as position,
         cast(team_id as bigint) as team_id,
         cast(team_name as varchar) as team_name,
+        cast(team_crest as varchar) as team_crest,
         cast(played_games as bigint) as played_games,
         cast(won as bigint) as won,
         cast(draw as bigint) as draw,

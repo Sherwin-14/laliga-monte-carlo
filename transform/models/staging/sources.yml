@@ -64,13 +64,63 @@ sources:
         columns:
           - name: match_id
             description: football-data.org match id.
+          - name: season
+            description: Season start year (e.g. 2026 for 2026/27).
           - name: matchday
             description: Matchday number (1-38).
           - name: utc_date
             description: Kickoff time in UTC.
           - name: status
             description: Match status (FINISHED, TIMED, SCHEDULED, ...).
+          - name: home_team_id
+            description: football-data.org home team id.
           - name: home_team_name
             description: Home team name.
+          - name: home_team_crest
+            description: Home club crest image URL.
+          - name: away_team_id
+            description: football-data.org away team id.
           - name: away_team_name
             description: Away team name.
+          - name: away_team_crest
+            description: Away club crest image URL.
+          - name: home_goals
+            description: Full-time home goals (null until the match is played).
+          - name: away_goals
+            description: Full-time away goals (null until the match is played).
+          - name: winner
+            description: Match winner (HOME_TEAM, AWAY_TEAM, or DRAW).
+      - name: matches_history
+        description: >
+          Past La Liga seasons' fixtures and results, flattened by the Python
+          ingestion layer from the /v4/competitions/PD/matches endpoint with a
+          season filter. Loaded to support head-to-head history.
+        columns:
+          - name: match_id
+            description: football-data.org match id.
+          - name: season
+            description: Season start year (e.g. 2025 for 2025/26).
+          - name: matchday
+            description: Matchday number (1-38).
+          - name: utc_date
+            description: Kickoff time in UTC.
+          - name: status
+            description: Match status (FINISHED, TIMED, SCHEDULED, ...).
+          - name: home_team_id
+            description: football-data.org home team id.
+          - name: home_team_name
+            description: Home team name.
+          - name: home_team_crest
+            description: Home club crest image URL.
+          - name: away_team_id
+            description: football-data.org away team id.
+          - name: away_team_name
+            description: Away team name.
+          - name: away_team_crest
+            description: Away club crest image URL.
+          - name: home_goals
+            description: Full-time home goals (null until the match is played).
+          - name: away_goals
+            description: Full-time away goals (null until the match is played).
+          - name: winner
+            description: Match winner (HOME_TEAM, AWAY_TEAM, or DRAW).

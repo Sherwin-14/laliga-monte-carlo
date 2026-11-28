@@ -34,6 +34,8 @@ models:
         description: Team name.
         tests:
           - not_null
+      - name: team_crest
+        description: Club crest image URL.
       - name: played_games
         description: Matches played.
       - name: won
@@ -72,7 +74,42 @@ models:
         description: Home team name.
         tests:
           - not_null
+      - name: home_team_crest
+        description: Home club crest image URL.
       - name: away_team_name
         description: Away team name.
         tests:
           - not_null
+      - name: away_team_crest
+        description: Away club crest image URL.
+  - name: fct_match_results
+    description: >
+      Finished La Liga results across the current season and the three before
+      it, with full-time scores. This is the single table the head-to-head
+      section reads; the W/D/L record is computed there from the selected
+      team's perspective.
+    columns:
+      - name: season
+        description: Season start year (e.g. 2026 for 2026/27).
+      - name: match_date
+        description: Match date in Spain local time.
+      - name: matchday
+        description: Matchday number (1-38).
+      - name: home_team_name
+        description: Home team name.
+        tests:
+          - not_null
+      - name: home_team_crest
+        description: Home club crest image URL.
+      - name: away_team_name
+        description: Away team name.
+        tests:
+          - not_null
+      - name: away_team_crest
+        description: Away club crest image URL.
+      - name: home_goals
+        description: Full-time home goals.
+      - name: away_goals
+        description: Full-time away goals.
+      - name: winner
+        description: Match winner (HOME_TEAM, AWAY_TEAM, or DRAW).

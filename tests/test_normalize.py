@@ -46,7 +46,7 @@ def _scorer(**overrides: object) -> dict:
 def _standing(**overrides: object) -> dict:
     base: dict = {
         "position": 1,
-        "team": {"id": 81, "name": "FC Barcelona"},
+        "team": {"id": 81, "name": "FC Barcelona", "crest": "https://crests.football-data.org/81.png"},
         "playedGames": 13,
         "won": 12,
         "draw": 0,
@@ -71,11 +71,12 @@ def _standings_response(rows: list[dict]) -> dict:
 def _match(**overrides: object) -> dict:
     base: dict = {
         "id": 1001,
+        "season": {"id": 1577, "startDate": "2026-08-15", "endDate": "2027-05-23"},
         "matchday": 14,
         "utcDate": "2026-11-28T13:00:00Z",
         "status": "TIMED",
-        "homeTeam": {"id": 81, "name": "FC Barcelona"},
-        "awayTeam": {"id": 86, "name": "Real Madrid CF"},
+        "homeTeam": {"id": 81, "name": "FC Barcelona", "crest": "https://crests.football-data.org/81.png"},
+        "awayTeam": {"id": 86, "name": "Real Madrid CF", "crest": "https://crests.football-data.org/86.png"},
     }
     base.update(overrides)
     return base
@@ -168,6 +169,7 @@ def test_extract_standings_returns_flattened_rows() -> None:
             "position": 1,
             "team_id": 81,
             "team_name": "FC Barcelona",
+            "team_crest": "https://crests.football-data.org/81.png",
             "played_games": 13,
             "won": 12,
             "draw": 0,
@@ -199,6 +201,7 @@ def test_flatten_standing_missing_team_fills_none() -> None:
     row = flatten_standing(entry)
     assert row["team_id"] is None
     assert row["team_name"] is None
+    assert row["team_crest"] is None
 
 
 def test_flatten_standing_null_values_preserved() -> None:
@@ -212,11 +215,19 @@ def test_extract_matches_returns_flattened_rows() -> None:
     assert rows == [
         {
             "match_id": 1001,
+            "season": 2026,
             "matchday": 14,
             "utc_date": "2026-11-28T13:00:00Z",
             "status": "TIMED",
+            "home_team_id": 81,
             "home_team_name": "FC Barcelona",
+            "home_team_crest": "https://crests.football-data.org/81.png",
+            "away_team_id": 86,
             "away_team_name": "Real Madrid CF",
+            "away_team_crest": "https://crests.football-data.org/86.png",
+            "home_goals": None,
+            "away_goals": None,
+            "winner": None,
         }
     ]
 
@@ -231,8 +242,33 @@ def test_flatten_match_missing_teams_fill_none() -> None:
     del match["homeTeam"]
     del match["awayTeam"]
     row = flatten_match(match)
+    assert row["home_team_id"] is None
     assert row["home_team_name"] is None
+    assert row["home_team_crest"] is None
+    assert row["away_team_id"] is None
     assert row["away_team_name"] is None
+    assert row["away_team_crest"] is None
+
+
+def test_flatten_match_finished_extracts_score() -> None:
+    match = _match(
+        status="FINISHED",
+        score={
+            "winner": "AWAY_TEAM",
+            "duration": "REGULAR",
+            "fullTime": {"home": 1, "away": 3},
+        },
+    )
+    row = flatten_match(match)
+    assert row["home_goals"] == 1
+    assert row["away_goals"] == 3
+    assert row["winner"] == "AWAY_TEAM"
+
+
+def test_flatten_match_missing_season_is_none() -> None:
+    match = _match()
+    del match["season"]
+    assert flatten_match(match)["season"] is None
 
 
 def test_flatten_match_null_values_preserved() -> None:

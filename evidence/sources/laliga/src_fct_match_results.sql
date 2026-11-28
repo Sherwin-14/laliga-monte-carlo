@@ -1,0 +1,1 @@
+FROM marts.fct_match_results

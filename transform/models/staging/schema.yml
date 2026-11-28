@@ -56,6 +56,8 @@ models:
         description: Team name.
         tests:
           - not_null
+      - name: team_crest
+        description: Club crest image URL.
       - name: played_games
         description: Matches played.
         tests:
@@ -87,6 +89,8 @@ models:
         tests:
           - not_null
           - unique
+      - name: season
+        description: Season start year (e.g. 2026 for 2026/27).
       - name: matchday
         description: Matchday number (1-38).
         tests:
@@ -99,11 +103,75 @@ models:
         description: Match status (FINISHED, TIMED, SCHEDULED, ...).
         tests:
           - not_null
+      - name: home_team_id
+        description: football-data.org home team id.
       - name: home_team_name
         description: Home team name.
         tests:
           - not_null
+      - name: home_team_crest
+        description: Home club crest image URL.
+      - name: away_team_id
+        description: football-data.org away team id.
       - name: away_team_name
         description: Away team name.
         tests:
           - not_null
+      - name: away_team_crest
+        description: Away club crest image URL.
+      - name: home_goals
+        description: Full-time home goals (null until the match is played).
+      - name: away_goals
+        description: Full-time away goals (null until the match is played).
+      - name: winner
+        description: Match winner (HOME_TEAM, AWAY_TEAM, or DRAW).
+  - name: stg_fdorg__matches_history
+    description: >
+      Clean, typed match rows from the raw dlt history table. One row per match
+      across past seasons (the current season and the three before it), loaded
+      to support head-to-head history. Types are cast explicitly so downstream
+      models never depend on source types.
+    columns:
+      - name: match_id
+        description: football-data.org match id.
+        tests:
+          - not_null
+          - unique
+      - name: season
+        description: Season start year (e.g. 2025 for 2025/26).
+        tests:
+          - not_null
+      - name: matchday
+        description: Matchday number (1-38).
+        tests:
+          - not_null
+      - name: utc_date
+        description: Kickoff time in UTC.
+        tests:
+          - not_null
+      - name: status
+        description: Match status (FINISHED, TIMED, SCHEDULED, ...).
+        tests:
+          - not_null
+      - name: home_team_id
+        description: football-data.org home team id.
+      - name: home_team_name
+        description: Home team name.
+        tests:
+          - not_null
+      - name: home_team_crest
+        description: Home club crest image URL.
+      - name: away_team_id
+        description: football-data.org away team id.
+      - name: away_team_name
+        description: Away team name.
+        tests:
+          - not_null
+      - name: away_team_crest
+        description: Away club crest image URL.
+      - name: home_goals
+        description: Full-time home goals (null until the match is played).
+      - name: away_goals
+        description: Full-time away goals (null until the match is played).
+      - name: winner
+        description: Match winner (HOME_TEAM, AWAY_TEAM, or DRAW).

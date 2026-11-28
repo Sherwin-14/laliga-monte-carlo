@@ -1,6 +1,7 @@
 select
     position,
     team_name,
+    team_crest,
     played_games,
     won,
     draw,

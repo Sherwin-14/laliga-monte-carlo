@@ -88,14 +88,15 @@ def flatten_standing(entry: dict) -> dict:
 
     Returns:
         A flat dict with keys ``position``, ``team_id``, ``team_name``,
-        ``played_games``, ``won``, ``draw``, ``lost``, ``points``,
-        ``goals_for``, ``goals_against``, and ``goal_difference``.
+        ``team_crest``, ``played_games``, ``won``, ``draw``, ``lost``,
+        ``points``, ``goals_for``, ``goals_against``, and ``goal_difference``.
     """
     team = entry.get("team") or {}
     return {
         "position": entry.get("position"),
         "team_id": team.get("id"),
         "team_name": team.get("name"),
+        "team_crest": team.get("crest"),
         "played_games": entry.get("playedGames"),
         "won": entry.get("won"),
         "draw": entry.get("draw"),
@@ -137,16 +138,45 @@ def flatten_match(match: dict) -> dict:
         match: A single match object from the API response.
 
     Returns:
-        A flat dict with keys ``match_id``, ``matchday``, ``utc_date``,
-        ``status``, ``home_team_name``, and ``away_team_name``.
+        A flat dict with keys ``match_id``, ``season``, ``matchday``,
+        ``utc_date``, ``status``, ``home_team_id``, ``home_team_name``,
+        ``home_team_crest``, ``away_team_id``, ``away_team_name``,
+        ``away_team_crest``, ``home_goals``, ``away_goals``, and ``winner``.
+        ``home_goals``/``away_goals`` come from the full-time score and are
+        ``None`` for matches that have not been played yet.
     """
     home = match.get("homeTeam") or {}
     away = match.get("awayTeam") or {}
+    score = match.get("score") or {}
+    full_time = score.get("fullTime") or {}
     return {
         "match_id": match.get("id"),
+        "season": _season_year(match),
         "matchday": match.get("matchday"),
         "utc_date": match.get("utcDate"),
         "status": match.get("status"),
+        "home_team_id": home.get("id"),
         "home_team_name": home.get("name"),
+        "home_team_crest": home.get("crest"),
+        "away_team_id": away.get("id"),
         "away_team_name": away.get("name"),
+        "away_team_crest": away.get("crest"),
+        "home_goals": full_time.get("home"),
+        "away_goals": full_time.get("away"),
+        "winner": score.get("winner"),
     }
+
+
+def _season_year(match: dict) -> int | None:
+    """Return the season's start year from a match's ``season.startDate``.
+
+    Args:
+        match: A single match object from the API response.
+
+    Returns:
+        The four-digit start year (e.g. 2026 for the 2026/27 season), or
+        ``None`` when the season or its start date is missing.
+    """
+    season = match.get("season") or {}
+    start_date = season.get("startDate")
+    return int(str(start_date).split("-")[0]) if start_date else None

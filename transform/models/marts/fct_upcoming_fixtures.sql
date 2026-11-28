@@ -31,7 +31,9 @@ select
     strftime(kickoff_madrid_ts, '%H:%M') as kickoff_madrid,
     strftime(kickoff_utc_ts, '%H:%M') as kickoff_utc,
     home_team_name,
-    away_team_name
+    home_team_crest,
+    away_team_name,
+    away_team_crest
 from localised
 where matchday = (select matchday from next_matchday)
 order by match_date, kickoff_madrid
