@@ -1,3 +1,5 @@
+from datetime import date
+
 import dlt
 
 from exceptions import ConfigError
@@ -27,10 +29,11 @@ def read_api_key() -> str:
 def main() -> None:
     """Run the current-season ingestion steps."""
     api_key = read_api_key()
+    today = date.today()
     load_scorers(api_key, WAREHOUSE_PATH)
     load_standings(api_key, WAREHOUSE_PATH)
     load_matches(api_key, WAREHOUSE_PATH)
-    load_matches_history(api_key, WAREHOUSE_PATH)
+    load_matches_history(api_key, WAREHOUSE_PATH, today)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from datetime import date
+
 import dlt
 from dlt.sources.helpers import requests
 
@@ -10,9 +12,42 @@ SCORERS_LIMIT = 500
 MATCHES_LIMIT = 500
 DATASET_NAME = "raw"
 
-# Past seasons fetched for head-to-head history. The free tier exposes the
-# current season and the three before it; anything older returns HTTP 403.
-HISTORICAL_SEASONS = (2023, 2024, 2025)
+# How many past seasons to keep for head-to-head history, and the month a La
+# Liga season begins. The free tier exposes the current season and the three
+# before it; anything older returns HTTP 403.
+HISTORICAL_SEASON_COUNT = 3
+SEASON_START_MONTH = 8
+
+
+def current_season_start_year(today: date) -> int:
+    """Return the La Liga season start year for ``today``.
+
+    A season runs roughly August to May and is named for the year it starts
+    in. Before August the season in progress began the previous calendar year.
+
+    Args:
+        today: The date to resolve the season for.
+
+    Returns:
+        The season's start year (e.g. 2026 for the 2026/27 season).
+    """
+    if today.month >= SEASON_START_MONTH:
+        return today.year
+    return today.year - 1
+
+
+def historical_season_start_years(today: date) -> tuple[int, ...]:
+    """Return the start years of the seasons before the current one.
+
+    Args:
+        today: The date to resolve the current season from.
+
+    Returns:
+        ``HISTORICAL_SEASON_COUNT`` season start years, oldest first (e.g.
+        ``(2023, 2024, 2025)`` when the current season is 2026).
+    """
+    current = current_season_start_year(today)
+    return tuple(range(current - HISTORICAL_SEASON_COUNT, current))
 
 SCORER_COLUMNS = {
     "player_id": {"data_type": "bigint", "nullable": True},
@@ -162,16 +197,19 @@ def matches(api_key: str):
 
 
 @dlt.resource(name="matches_history", write_disposition="replace", columns=MATCHES_COLUMNS)
-def matches_history(api_key: str):
+def matches_history(api_key: str, today: date):
     """Yield flattened match rows for past La Liga seasons, for head-to-head.
 
     Args:
         api_key: The football-data.org key, sent in the X-Auth-Token header.
+        today: The date used to resolve the current season and, from it, the
+            seasons to fetch.
 
     Yields:
-        Flattened match rows for every season in ``HISTORICAL_SEASONS``.
+        Flattened match rows for the seasons returned by
+        ``historical_season_start_years``.
     """
-    for season in HISTORICAL_SEASONS:
+    for season in historical_season_start_years(today):
         yield from _fetch_matches(api_key, season)
 
 
@@ -205,11 +243,12 @@ def load_matches(api_key: str, warehouse_path: str) -> None:
     _pipeline(warehouse_path).run(matches(api_key))
 
 
-def load_matches_history(api_key: str, warehouse_path: str) -> None:
+def load_matches_history(api_key: str, warehouse_path: str, today: date) -> None:
     """Fetch past seasons' matches and load them into the shared DuckDB warehouse.
 
     Args:
         api_key: The football-data.org key.
         warehouse_path: Path to the DuckDB file shared with dbt.
+        today: The date used to resolve which past seasons to fetch.
     """
-    _pipeline(warehouse_path).run(matches_history(api_key))
+    _pipeline(warehouse_path).run(matches_history(api_key, today))

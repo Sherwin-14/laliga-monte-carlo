@@ -47,24 +47,6 @@ order by match_date, kickoff_madrid
   <Column id=away_team_name title="Away"/>
 </DataTable>
 
-## The Pichichi Race
-
-The Pichichi goes to La Liga's top scorer each season, an award given by the newspaper Marca and named after the Athletic Club striker Rafael "Pichichi" Moreno. Below are the current season's leading scorers by goals, refreshed every Thursday.
-
-```sql top_scorers
-select * from src_fct_top_scorers
-order by scorer_rank
-```
-
-<DataTable data={top_scorers} rows=5>
-  <Column id=scorer_rank title="#"/>
-  <Column id=player_name title="Player"/>
-  <Column id=team_name title="Team"/>
-  <Column id=nationality title="Nationality"/>
-  <Column id=age title="Age"/>
-  <Column id=goals title="Goals"/>
-</DataTable>
-
 ## Head to Head
 
 Pick two teams to see their head-to-head record and recent meetings. "Team A" is the first dropdown and drives the W/D/L column and the win tally.
@@ -139,3 +121,23 @@ order by match_date desc
   <Column id=away_team_name title="Away"/>
   <Column id=result_a title="Result (A)"/>
 </DataTable>
+
+
+## The Pichichi Race
+
+The Pichichi goes to La Liga's top scorer each season, an award given by the newspaper Marca and named after the Athletic Club striker Rafael "Pichichi" Moreno. Below are the current season's leading scorers by goals, refreshed every Thursday.
+
+```sql top_scorers
+select * from src_fct_top_scorers
+order by scorer_rank
+```
+
+<DataTable data={top_scorers} rows=5>
+  <Column id=scorer_rank title="#"/>
+  <Column id=player_name title="Player"/>
+  <Column id=team_name title="Team"/>
+  <Column id=nationality title="Nationality"/>
+  <Column id=age title="Age"/>
+  <Column id=goals title="Goals"/>
+</DataTable>
+
