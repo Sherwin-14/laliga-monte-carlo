@@ -11,10 +11,6 @@ COMPETITION_CODE = "PD"
 SCORERS_LIMIT = 500
 MATCHES_LIMIT = 500
 DATASET_NAME = "raw"
-
-# How many past seasons to keep for head-to-head history, and the month a La
-# Liga season begins. The free tier exposes the current season and the three
-# before it; anything older returns HTTP 403.
 HISTORICAL_SEASON_COUNT = 3
 SEASON_START_MONTH = 8
 
