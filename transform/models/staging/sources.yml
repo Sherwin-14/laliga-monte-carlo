@@ -57,3 +57,20 @@ sources:
             description: Goals conceded.
           - name: goal_difference
             description: Goals scored minus conceded.
+      - name: matches
+        description: >
+          Current-season La Liga fixtures and results, flattened by the Python
+          ingestion layer from the /v4/competitions/PD/matches endpoint.
+        columns:
+          - name: match_id
+            description: football-data.org match id.
+          - name: matchday
+            description: Matchday number (1-38).
+          - name: utc_date
+            description: Kickoff time in UTC.
+          - name: status
+            description: Match status (FINISHED, TIMED, SCHEDULED, ...).
+          - name: home_team_name
+            description: Home team name.
+          - name: away_team_name
+            description: Away team name.

@@ -24,9 +24,26 @@ order by position
   <Column id=points title="Pts"/>
 </DataTable>
 
+## Next Matchday
+
+```sql next_fixtures
+select * from src_fct_upcoming_fixtures
+order by match_date
+```
+
+<DataTable data={next_fixtures} rows=10>
+  <Column id=matchday title="MD"/>
+  <Column id=status title="Status"/>
+  <Column id=match_date title="Date"/>
+  <Column id=kickoff_madrid title="Kickoff (Madrid)"/>
+  <Column id=kickoff_utc title="Kickoff (UTC)"/>
+  <Column id=home_team_name title="Home"/>
+  <Column id=away_team_name title="Away"/>
+</DataTable>
+
 ## The Pichichi Race
 
-La Liga's golden boot — current-season scorers ranked by goals.
+The Pichichi goes to La Liga's top scorer each season, an award given by the newspaper Marca and named after the Athletic Club striker Rafael "Pichichi" Moreno. Below are the current season's leading scorers by goals, refreshed every Thursday.
 
 ```sql top_scorers
 select * from src_fct_top_scorers

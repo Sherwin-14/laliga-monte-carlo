@@ -1,7 +1,7 @@
 import dlt
 
 from exceptions import ConfigError
-from ingest import load_scorers, load_standings
+from ingest import load_matches, load_scorers, load_standings
 
 WAREHOUSE_PATH = "../data/warehouse/laliga.duckdb"
 API_KEY_PATH = "sources.fdorg.api_key"
@@ -29,6 +29,7 @@ def main() -> None:
     api_key = read_api_key()
     load_scorers(api_key, WAREHOUSE_PATH)
     load_standings(api_key, WAREHOUSE_PATH)
+    load_matches(api_key, WAREHOUSE_PATH)
 
 
 if __name__ == "__main__":

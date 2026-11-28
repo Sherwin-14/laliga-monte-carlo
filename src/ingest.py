@@ -2,11 +2,12 @@ import dlt
 from dlt.sources.helpers import requests
 
 from exceptions import FetchError
-from normalize import extract_scorers, extract_standings
+from normalize import extract_matches, extract_scorers, extract_standings
 
 FDORG_BASE_URL = "https://api.football-data.org/v4"
 COMPETITION_CODE = "PD"
 SCORERS_LIMIT = 500
+MATCHES_LIMIT = 500
 DATASET_NAME = "raw"
 
 SCORER_COLUMNS = {
@@ -33,6 +34,15 @@ STANDINGS_COLUMNS = {
     "goals_for": {"data_type": "bigint", "nullable": True},
     "goals_against": {"data_type": "bigint", "nullable": True},
     "goal_difference": {"data_type": "bigint", "nullable": True},
+}
+
+MATCHES_COLUMNS = {
+    "match_id": {"data_type": "bigint", "nullable": True},
+    "matchday": {"data_type": "bigint", "nullable": True},
+    "utc_date": {"data_type": "text", "nullable": True},
+    "status": {"data_type": "text", "nullable": True},
+    "home_team_name": {"data_type": "text", "nullable": True},
+    "away_team_name": {"data_type": "text", "nullable": True},
 }
 
 
@@ -96,6 +106,32 @@ def standings(api_key: str):
     yield from extract_standings(response.json())
 
 
+@dlt.resource(name="matches", write_disposition="replace", columns=MATCHES_COLUMNS)
+def matches(api_key: str):
+    """Yield flattened match rows for the current La Liga season.
+
+    Args:
+        api_key: The football-data.org key, sent in the X-Auth-Token header.
+
+    Yields:
+        Flattened match rows (see ``normalize.extract_matches``).
+
+    Raises:
+        FetchError: If the API returns a non-success HTTP status.
+    """
+    url = f"{FDORG_BASE_URL}/competitions/{COMPETITION_CODE}/matches"
+    response = requests.get(
+        url,
+        headers={"X-Auth-Token": api_key},
+        params={"limit": MATCHES_LIMIT},
+    )
+    if not response.ok:
+        raise FetchError(
+            f"GET {url} -> HTTP {response.status_code}: {response.text}"
+        )
+    yield from extract_matches(response.json())
+
+
 def load_scorers(api_key: str, warehouse_path: str) -> None:
     """Fetch top scorers and load them into the shared DuckDB warehouse.
 
@@ -114,3 +150,13 @@ def load_standings(api_key: str, warehouse_path: str) -> None:
         warehouse_path: Path to the DuckDB file shared with dbt.
     """
     _pipeline(warehouse_path).run(standings(api_key))
+
+
+def load_matches(api_key: str, warehouse_path: str) -> None:
+    """Fetch the season's matches and load them into the shared DuckDB warehouse.
+
+    Args:
+        api_key: The football-data.org key.
+        warehouse_path: Path to the DuckDB file shared with dbt.
+    """
+    _pipeline(warehouse_path).run(matches(api_key))

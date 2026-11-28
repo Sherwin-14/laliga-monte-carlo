@@ -1,0 +1,1 @@
+FROM marts.fct_upcoming_fixtures

@@ -76,3 +76,34 @@ models:
         description: Goals conceded.
       - name: goal_difference
         description: Goals scored minus conceded.
+  - name: stg_fdorg__matches
+    description: >
+      Clean, typed match rows from the raw dlt table. One row per match in the
+      current season. Types are cast explicitly so downstream models never
+      depend on source types.
+    columns:
+      - name: match_id
+        description: football-data.org match id.
+        tests:
+          - not_null
+          - unique
+      - name: matchday
+        description: Matchday number (1-38).
+        tests:
+          - not_null
+      - name: utc_date
+        description: Kickoff time in UTC.
+        tests:
+          - not_null
+      - name: status
+        description: Match status (FINISHED, TIMED, SCHEDULED, ...).
+        tests:
+          - not_null
+      - name: home_team_name
+        description: Home team name.
+        tests:
+          - not_null
+      - name: away_team_name
+        description: Away team name.
+        tests:
+          - not_null

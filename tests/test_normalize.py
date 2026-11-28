@@ -1,4 +1,4 @@
-"""Tests for the pure scorer- and standings-normalization functions.
+"""Tests for the pure scorer-, standings-, and match-normalization functions.
 
 No real API is called: every case is built from inline dicts or the committed
 fixture in tests/fixtures/scorers.json.
@@ -11,8 +11,10 @@ import pytest
 
 from exceptions import ValidationError
 from normalize import (
+    extract_matches,
     extract_scorers,
     extract_standings,
+    flatten_match,
     flatten_scorer,
     flatten_standing,
 )
@@ -64,6 +66,23 @@ def _standings_response(rows: list[dict]) -> dict:
             {"stage": "REGULAR_SEASON", "type": "TOTAL", "group": None, "table": rows}
         ]
     }
+
+
+def _match(**overrides: object) -> dict:
+    base: dict = {
+        "id": 1001,
+        "matchday": 14,
+        "utcDate": "2026-11-28T13:00:00Z",
+        "status": "TIMED",
+        "homeTeam": {"id": 81, "name": "FC Barcelona"},
+        "awayTeam": {"id": 86, "name": "Real Madrid CF"},
+    }
+    base.update(overrides)
+    return base
+
+
+def _matches_response(rows: list[dict]) -> dict:
+    return {"matches": rows}
 
 
 def test_extract_scorers_returns_flattened_rows() -> None:
@@ -186,3 +205,37 @@ def test_flatten_standing_null_values_preserved() -> None:
     row = flatten_standing(_standing(goalsFor=None, goalsAgainst=None))
     assert row["goals_for"] is None
     assert row["goals_against"] is None
+
+
+def test_extract_matches_returns_flattened_rows() -> None:
+    rows = extract_matches(_matches_response([_match()]))
+    assert rows == [
+        {
+            "match_id": 1001,
+            "matchday": 14,
+            "utc_date": "2026-11-28T13:00:00Z",
+            "status": "TIMED",
+            "home_team_name": "FC Barcelona",
+            "away_team_name": "Real Madrid CF",
+        }
+    ]
+
+
+def test_extract_matches_missing_matches_key_raises() -> None:
+    with pytest.raises(ValidationError):
+        extract_matches({"count": 0})
+
+
+def test_flatten_match_missing_teams_fill_none() -> None:
+    match = _match()
+    del match["homeTeam"]
+    del match["awayTeam"]
+    row = flatten_match(match)
+    assert row["home_team_name"] is None
+    assert row["away_team_name"] is None
+
+
+def test_flatten_match_null_values_preserved() -> None:
+    row = flatten_match(_match(matchday=None, status=None))
+    assert row["matchday"] is None
+    assert row["status"] is None

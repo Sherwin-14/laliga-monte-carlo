@@ -105,3 +105,48 @@ def flatten_standing(entry: dict) -> dict:
         "goals_against": entry.get("goalsAgainst"),
         "goal_difference": entry.get("goalDifference"),
     }
+
+
+def extract_matches(response: dict) -> list[dict]:
+    """Return the flattened match rows from a matches response.
+
+    Args:
+        response: The parsed JSON body of a matches API response.
+
+    Returns:
+        A list of flattened match rows, one dict per match.
+
+    Raises:
+        ValidationError: If ``response["matches"]`` is not a list.
+    """
+    matches = response.get("matches")
+    if not isinstance(matches, list):
+        raise ValidationError(
+            f"field 'matches': expected a list, got {type(matches).__name__}"
+        )
+    return [flatten_match(match) for match in matches]
+
+
+def flatten_match(match: dict) -> dict:
+    """Flatten one match object into a flat, snake_case row.
+
+    Missing or null fields become ``None`` rather than raising, so column drift
+    in the source never crashes ingestion; dbt tests flag the gaps instead.
+
+    Args:
+        match: A single match object from the API response.
+
+    Returns:
+        A flat dict with keys ``match_id``, ``matchday``, ``utc_date``,
+        ``status``, ``home_team_name``, and ``away_team_name``.
+    """
+    home = match.get("homeTeam") or {}
+    away = match.get("awayTeam") or {}
+    return {
+        "match_id": match.get("id"),
+        "matchday": match.get("matchday"),
+        "utc_date": match.get("utcDate"),
+        "status": match.get("status"),
+        "home_team_name": home.get("name"),
+        "away_team_name": away.get("name"),
+    }

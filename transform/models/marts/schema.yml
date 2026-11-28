@@ -52,3 +52,27 @@ models:
         description: Points.
         tests:
           - not_null
+  - name: fct_upcoming_fixtures
+    description: >
+      The next La Liga matchday's fixtures (non-finished matches in the earliest
+      upcoming matchday), ordered by kickoff. This is the single table the
+      "next matchday" section reads.
+    columns:
+      - name: matchday
+        description: Matchday number.
+      - name: status
+        description: Match status (TIMED, SCHEDULED, POSTPONED, ...).
+      - name: match_date
+        description: Kickoff date in Spain local time.
+      - name: kickoff_madrid
+        description: Kickoff time in Spain local time (HH:MM).
+      - name: kickoff_utc
+        description: Kickoff time in UTC (HH:MM).
+      - name: home_team_name
+        description: Home team name.
+        tests:
+          - not_null
+      - name: away_team_name
+        description: Away team name.
+        tests:
+          - not_null
